@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2015
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Valkyrie Revelations.CSharp", "Valkyrie Revelations.CSharp.csproj", "{A665B9BF-96D6-295E-B3B0-880CD81BC455}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Valkyrie Revelations.CSharp.Editor", "Valkyrie Revelations.CSharp.Editor.csproj", "{C4E30E2D-E262-20A0-3957-C555CCC73DE0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A665B9BF-96D6-295E-B3B0-880CD81BC455}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A665B9BF-96D6-295E-B3B0-880CD81BC455}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A665B9BF-96D6-295E-B3B0-880CD81BC455}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A665B9BF-96D6-295E-B3B0-880CD81BC455}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C4E30E2D-E262-20A0-3957-C555CCC73DE0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C4E30E2D-E262-20A0-3957-C555CCC73DE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C4E30E2D-E262-20A0-3957-C555CCC73DE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C4E30E2D-E262-20A0-3957-C555CCC73DE0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
