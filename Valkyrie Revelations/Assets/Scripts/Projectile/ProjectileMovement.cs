@@ -72,9 +72,9 @@ public class ProjectileMovement : MonoBehaviour
     {
         Debug.Log("Your bullet hit " + collision.gameObject.name);
         Enemy enemy = collision.gameObject.GetComponent<Enemy>();
-        if (collision.gameObject.transform.parent != null)
+        /*if (collision.gameObject.transform.parent != null)
         {
-            /*JetFighterEnemy jfenemy = collision.gameObject.transform.parent.GetComponent<JetFighterEnemy>();
+            JetFighterEnemy jfenemy = collision.gameObject.transform.parent.GetComponent<JetFighterEnemy>();
             Player player = collision.gameObject.transform.parent.GetComponent<Player>();
             if (player != null)
             {
@@ -94,9 +94,10 @@ public class ProjectileMovement : MonoBehaviour
                 {
                     jfenemy.takeDamage(10, 0);
                 }
-            }*/
+            }
         }
-        else if (enemy != null)
+        else */
+        if (enemy != null)
         {
             enemy.takeDamage(10);
         }

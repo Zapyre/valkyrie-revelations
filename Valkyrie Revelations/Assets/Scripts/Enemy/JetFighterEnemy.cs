@@ -47,7 +47,7 @@ public class JetFighterEnemy : Enemy {
             }
             if (!enemyDead)
             {
-                Vector3 destinationPosition = LevelManager.GetPenguinKnight().transform.position;
+                Vector3 destinationPosition = LevelManager.GetPlayer().transform.position;
                 shootBulletTime -= Time.deltaTime;
                 if (shootBulletTime <= 0)
                 {

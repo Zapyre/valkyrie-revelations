@@ -50,8 +50,8 @@ public class Enemy : MonoBehaviour {
                 shootBulletTime -= Time.deltaTime;
                 if (shootBulletTime <= 0)
                 {
-                    Vector3 destinationPosition = LevelManager.GetPenguinKnight().transform.position;
-                    destinationPosition = new Vector3(destinationPosition.x, destinationPosition.y + 1.0f, destinationPosition.z);
+                    Vector3 destinationPosition = LevelManager.GetPlayer().transform.position;
+                    destinationPosition = new Vector3(destinationPosition.x, destinationPosition.y + 1.5f, destinationPosition.z);
                     this.transform.LookAt(destinationPosition);
                     Projectile projectile = new Projectile(this.transform.FindChild("Gunpoint").transform.position);
                     GameObject bullet = projectile.projectileObj;
@@ -72,9 +72,11 @@ public class Enemy : MonoBehaviour {
                 }
 
                 originPosition = this.transform.position;
+                Debug.Log(originPosition);
+                // Looks like will need to update the functions for movement with the model
                 if (moveDirection == 0)
                 {
-                    Vector3 destinationPosition = LevelManager.GetPenguinKnight().transform.position;
+                    Vector3 destinationPosition = LevelManager.GetPlayer().transform.position;
                     this.transform.LookAt(destinationPosition);
                 }
                 else if (moveDirection == 1)

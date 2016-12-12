@@ -11,24 +11,22 @@ public class LevelManager : MonoBehaviour {
     public static bool moveToNextArea;
 
     private static GameObject player;
-    private static GameObject penguinKnight;
     private static int enemiesActivated;
 
     private float textAnimTime;
 
     // Use this for initialization
     void Start () {
-        mainLight = (Light)GameObject.Find("Main Light").GetComponent("Light");
+        //mainLight = (Light)GameObject.Find("Main Light").GetComponent("Light");
 
         enemiesDefeated = 0;
         player = GameObject.Find("Player");
-        penguinKnight = GameObject.Find("Penguin Knight");
 
         // Area initialization
         areaList = new ArrayList();
-        Area a = new Area(new Vector3(0, 0, 2), new Vector3(3, 0, 0), 3, new Vector3(0, 0, 28), new Vector3(1,0,28));
+        Area a = new Area(new Vector3(0, 0, 2), new Vector3(3, 0, 0), 1, new Vector3(0, 0, 28), new Vector3(1,0,28));
         areaList.Add(a);
-        Area b = new Area(new Vector3(2, 0, 0), new Vector3(0, 0, 3), 6, new Vector3(28, 0, 28), new Vector3(28, 0, 29));
+        /*Area b = new Area(new Vector3(2, 0, 0), new Vector3(0, 0, 3), 6, new Vector3(28, 0, 28), new Vector3(28, 0, 29));
         areaList.Add(b);
         Area c = new Area(new Vector3(0, 0, 2), new Vector3(-3, 0, 0), 9, new Vector3(-35, 0, 28), new Vector3(-35, 0, 27));
         areaList.Add(c);
@@ -39,7 +37,7 @@ public class LevelManager : MonoBehaviour {
         Area f = new Area(new Vector3(0, 0, 2), new Vector3(0, -1, 0), 17, new Vector3(0, 0, 44), new Vector3(0, 0, 45), true, true, "3-Screen Skirmish");
         areaList.Add(f);
         Area g = new Area(new Vector3(0, 0, 2), new Vector3(0, -1, 0), 18, new Vector3(0, 0, 0), new Vector3(0, 0, -1), true, true, "Boss Battle!", true);
-        areaList.Add(g);
+        areaList.Add(g);*/
 
         areaAt = 0;
 
@@ -79,8 +77,6 @@ public class LevelManager : MonoBehaviour {
                             enemiesActivated++;
                         }
 
-                        penguinKnight.GetComponent<Animation>().Play("WK_heavy_infantry_05_combat_idle");
-
                         NextPositionCheck();
 
                         textAnimTime = 6.0f;
@@ -101,8 +97,7 @@ public class LevelManager : MonoBehaviour {
 
                     if (knightPos != newKnightPos)
                     {
-                        penguinKnight.GetComponent<Animation>().Play("WK_heavy_infantry_06_combat_walk");
-                        float increment = 0.5f;
+                        float increment = 0.1f;
                         float x = knightPos.x - newKnightPos.x;
                         float y = knightPos.y - newKnightPos.y;
                         float z = knightPos.z - newKnightPos.z;
@@ -180,9 +175,9 @@ public class LevelManager : MonoBehaviour {
         }
     }
 
-    public static GameObject GetPenguinKnight()
+    public static GameObject GetPlayer()
     {
-        return penguinKnight;
+        return player;
     }
 
     public static Area GetCurrentArea()
