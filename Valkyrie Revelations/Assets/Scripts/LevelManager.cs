@@ -7,6 +7,7 @@ public class LevelManager : MonoBehaviour {
     public static ArrayList areaList;
     public static int areaAt;
 
+    private static bool enemiesAreaActivated;
     public static int enemiesDefeated;
     public static bool moveToNextArea;
 
@@ -24,8 +25,10 @@ public class LevelManager : MonoBehaviour {
 
         // Area initialization
         areaList = new ArrayList();
-        Area a = new Area(new Vector3(0, 0, 2), new Vector3(3, 0, 0), 1, new Vector3(0, 0, 28), new Vector3(1,0,28));
+        Area a = new Area(new Vector3(0, 0, 2), new Vector3(3, 0, 0), 3, new Vector3(2, 0, 0), new Vector3(3,0,0));
         areaList.Add(a);
+        Area b = new Area(new Vector3(0, 0, 2), new Vector3(3, 0, 0), 3, new Vector3(0, 0, 28), new Vector3(1, 0, 28));
+        areaList.Add(b);
         /*Area b = new Area(new Vector3(2, 0, 0), new Vector3(0, 0, 3), 6, new Vector3(28, 0, 28), new Vector3(28, 0, 29));
         areaList.Add(b);
         Area c = new Area(new Vector3(0, 0, 2), new Vector3(-3, 0, 0), 9, new Vector3(-35, 0, 28), new Vector3(-35, 0, 27));
@@ -62,78 +65,23 @@ public class LevelManager : MonoBehaviour {
             }
             else
             {
-                Area area = GetCurrentArea();
-                if (player.transform.position == area.nextPosition) // Arrival at new stage
+                if (!enemiesAreaActivated)
                 {
-                    player.transform.LookAt(area.nextLookAt);
-                    areaAt++;
-                    moveToNextArea = false;
-
-                    if (GetCurrentArea() != null)
+                    for (int i = enemiesActivated; i < GetCurrentArea().enemyBreakPoint; i++)
                     {
-                        for (int i = enemiesActivated; i < GetCurrentArea().enemyBreakPoint; i++)
-                        {
-                            GameObject.Find("Enemy " + enemiesActivated).GetComponent<Enemy>().enabled = true;
-                            enemiesActivated++;
-                        }
-
-                        NextPositionCheck();
-
-                        textAnimTime = 6.0f;
-                        if (areaList.Count > areaAt)
-                        {
-                            area = GetCurrentArea();
-                            if (area.areaAnim)
-                            {
-                                area.Animate();
-                            }
-                        }
+                        GameObject.Find("Enemy " + enemiesActivated).GetComponent<Enemy>().enabled = true;
+                        enemiesActivated++;
+                        enemiesAreaActivated = true;
                     }
                 }
-                else
+                NextPositionCheck();
+
+                textAnimTime = 6.0f;
+                if (areaList.Count > areaAt)
                 {
-                    Vector3 knightPos = player.transform.position;
-                    Vector3 newKnightPos = area.nextPosition;
-
-                    if (knightPos != newKnightPos)
+                    if (GetCurrentArea().areaAnim)
                     {
-                        float increment = 0.1f;
-                        float x = knightPos.x - newKnightPos.x;
-                        float y = knightPos.y - newKnightPos.y;
-                        float z = knightPos.z - newKnightPos.z;
-
-                        float newX = newKnightPos.x;
-                        float newY = newKnightPos.y;
-                        float newZ = newKnightPos.z;
-
-                        if (x < -increment)
-                        {
-                            newX = knightPos.x + increment;
-                        }
-                        else if (x > increment)
-                        {
-                            newX = knightPos.x - increment;
-                        }
-                        if (y < -increment)
-                        {
-                            newY = knightPos.y + increment;
-                        }
-                        else if (y > increment)
-                        {
-                            newY = knightPos.y - increment;
-                        }
-                        if (z < -increment)
-                        {
-                            newZ = knightPos.z + increment;
-                        }
-                        else if (z > increment)
-                        {
-                            newZ = knightPos.z - increment;
-                        }
-
-                        Vector3 newPos = new Vector3(newX, newY, newZ);
-                        player.transform.LookAt(newPos);
-                        player.transform.position = newPos;
+                        GetCurrentArea().Animate();
                     }
                 }
             }
@@ -167,7 +115,7 @@ public class LevelManager : MonoBehaviour {
 
     public static void NextPositionCheck()
     {
-        Debug.Log("Enemies Defeated : " + enemiesDefeated);
+        //Debug.Log("Enemies Defeated : " + enemiesDefeated);
         Area area = GetCurrentArea();
         if (area.CheckAreaPassed(enemiesDefeated, 1.0f))
         {
@@ -187,5 +135,12 @@ public class LevelManager : MonoBehaviour {
             return null;
         }
         return (Area)areaList[areaAt];
+    }
+
+    public static void SetupNextArea()
+    {
+        areaAt++;
+        moveToNextArea = false;
+        enemiesAreaActivated = false;
     }
 }

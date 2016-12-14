@@ -86,15 +86,6 @@
     <Compile Include="Assets\Resources\Standard Assets\CrossPlatformInput\Scripts\TiltInput.cs" />
     <Compile Include="Assets\Resources\Standard Assets\CrossPlatformInput\Scripts\TouchPad.cs" />
     <Compile Include="Assets\Resources\Standard Assets\CrossPlatformInput\Scripts\VirtualInput.cs" />
-    <Compile Include="Assets\Resources\Standard Assets\Environment\Water (Basic)\Scripts\WaterBasic.cs" />
-    <Compile Include="Assets\Resources\Standard Assets\Environment\Water\Water\Scripts\Displace.cs" />
-    <Compile Include="Assets\Resources\Standard Assets\Environment\Water\Water\Scripts\GerstnerDisplace.cs" />
-    <Compile Include="Assets\Resources\Standard Assets\Environment\Water\Water\Scripts\MeshContainer.cs" />
-    <Compile Include="Assets\Resources\Standard Assets\Environment\Water\Water\Scripts\PlanarReflection.cs" />
-    <Compile Include="Assets\Resources\Standard Assets\Environment\Water\Water\Scripts\SpecularLighting.cs" />
-    <Compile Include="Assets\Resources\Standard Assets\Environment\Water\Water\Scripts\Water.cs" />
-    <Compile Include="Assets\Resources\Standard Assets\Environment\Water\Water\Scripts\WaterBase.cs" />
-    <Compile Include="Assets\Resources\Standard Assets\Environment\Water\Water\Scripts\WaterTile.cs" />
     <Compile Include="Assets\Resources\Standard Assets\Utility\ActivateTrigger.cs" />
     <Compile Include="Assets\Resources\Standard Assets\Utility\AlphaButtonClickMask.cs" />
     <Compile Include="Assets\Resources\Standard Assets\Utility\AutoMobileShaderSwitch.cs" />
@@ -140,8 +131,8 @@
     <Compile Include="Assets\Resources\Standard Assets\Vehicles\Car\Scripts\WheelEffects.cs" />
     <Compile Include="Assets\Scripts\Area\Area.cs" />
     <Compile Include="Assets\Scripts\Enemy\Enemy.cs" />
-    <Compile Include="Assets\Scripts\Enemy\JetFighterEnemy.cs" />
     <Compile Include="Assets\Scripts\LevelManager.cs" />
+    <Compile Include="Assets\Scripts\Player\Player.cs" />
     <Compile Include="Assets\Scripts\Projectile\Projectile.cs" />
     <Compile Include="Assets\Scripts\Projectile\ProjectileMovement.cs" />
   </ItemGroup>
@@ -150,11 +141,6 @@
     <None Include="Assets\Resources\Standard Assets\Characters\RollerBall\RollerBallGuidelines.txt" />
     <None Include="Assets\Resources\Standard Assets\Characters\ThirdPersonCharacter\ThirdPersonCharacterGuidelines.txt" />
     <None Include="Assets\Resources\Standard Assets\CrossPlatformInput\CrossPlatformInputGuidelines.txt" />
-    <None Include="Assets\Resources\Standard Assets\Environment\Water (Basic)\Shaders\FXWaterBasic.shader" />
-    <None Include="Assets\Resources\Standard Assets\Environment\Water\Water\Shaders\FXWaterPro.shader" />
-    <None Include="Assets\Resources\Standard Assets\Environment\Water\Water4\Shaders\FXWater4Advanced.shader" />
-    <None Include="Assets\Resources\Standard Assets\Environment\Water\Water4\Shaders\FXWater4Simple.shader" />
-    <None Include="Assets\Resources\Standard Assets\Environment\Water\Water4\Shaders\WaterInclude.cginc" />
     <None Include="Assets\Resources\Standard Assets\Vehicles\Aircraft\AircraftGuidelines.txt" />
     <None Include="Assets\Resources\Standard Assets\Vehicles\Car\CarGuidelines.txt" />
     <None Include="Assets\Resources\Standard Assets\Vehicles\Car\Shaders\DiffuseReflectiveShader.shader" />

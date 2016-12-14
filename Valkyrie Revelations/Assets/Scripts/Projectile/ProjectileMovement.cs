@@ -72,34 +72,14 @@ public class ProjectileMovement : MonoBehaviour
     {
         Debug.Log("Your bullet hit " + collision.gameObject.name);
         Enemy enemy = collision.gameObject.GetComponent<Enemy>();
-        /*if (collision.gameObject.transform.parent != null)
-        {
-            JetFighterEnemy jfenemy = collision.gameObject.transform.parent.GetComponent<JetFighterEnemy>();
-            Player player = collision.gameObject.transform.parent.GetComponent<Player>();
-            if (player != null)
-            {
-                player.TakeDamage(10);
-            }
-            else if (jfenemy != null)
-            {
-                if (collision.gameObject.tag == "left")
-                {
-                    jfenemy.takeDamage(10, 1);
-                }
-                else if (collision.gameObject.tag == "right")
-                {
-                    jfenemy.takeDamage(10, 2);
-                }
-                else
-                {
-                    jfenemy.takeDamage(10, 0);
-                }
-            }
-        }
-        else */
+        Player player = collision.gameObject.GetComponent<Player>();
         if (enemy != null)
         {
-            enemy.takeDamage(10);
+            enemy.TakeDamage(10);
+        }
+        else if (player != null)
+        {
+            player.TakeDamage(10);
         }
 
         rbody.isKinematic = true;

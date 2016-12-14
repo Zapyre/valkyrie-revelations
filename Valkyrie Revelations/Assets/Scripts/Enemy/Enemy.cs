@@ -1,7 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityStandardAssets.CrossPlatformInput;
+using UnityStandardAssets.Characters.ThirdPerson;
 
-public class Enemy : MonoBehaviour {
+
+[RequireComponent(typeof(ThirdPersonCharacter))]
+public class Enemy : MonoBehaviour
+{
 
     protected float healthBarLength;
     protected float maxHealth;
@@ -14,24 +19,31 @@ public class Enemy : MonoBehaviour {
     protected float movementTime;
     protected float moveSpeed;
 
-	// Use this for initialization
-	void Start () {
+    private ThirdPersonCharacter m_Character; // A reference to the ThirdPersonCharacter on the object
+    private Vector3 m_Move;
+
+    // Use this for initialization
+    void Start()
+    {
         healthBarLength = 50;
         maxHealth = 50;
         health = 50;
         healthBarEnabled = false;
         enemyDead = false;
-        shootBulletTime = 0.0f;
+        shootBulletTime = Random.Range(3.0f, 5.0f);
 
         moveDirection = 0;
         movementTime = 0.0f;
-        moveSpeed = 0.05f;
+        moveSpeed = 0.5f;
 
         enabled = false;
+
+        m_Character = GetComponent<ThirdPersonCharacter>();
     }
-	
-	// Update is called once per frame
-	void Update () {
+
+    // Update is called once per frame
+    void Update()
+    {
         if (enabled)
         {
             if (health <= 0 && !enemyDead)
@@ -59,7 +71,7 @@ public class Enemy : MonoBehaviour {
                     pm.SetDestination(destinationPosition);
                     pm.CalculateSpeed(500.0f);
 
-                    shootBulletTime = Random.Range(0, 5.0f);
+                    shootBulletTime = Random.Range(3.0f, 5.0f);
 
                     moveDirection = 0;
                 }
@@ -68,48 +80,54 @@ public class Enemy : MonoBehaviour {
                 if (movementTime <= 0)
                 {
                     moveDirection = Random.Range(0, 5); // Int from 0-4 for rest, up/down/left/right
-                    movementTime = Random.Range(0, 5.0f);
+                    movementTime = Random.Range(1.0f, 5.0f);
                 }
 
                 originPosition = this.transform.position;
-                Debug.Log(originPosition);
                 // Looks like will need to update the functions for movement with the model
                 if (moveDirection == 0)
                 {
+                    m_Move = new Vector3(0, 0, 0);
                     Vector3 destinationPosition = LevelManager.GetPlayer().transform.position;
                     this.transform.LookAt(destinationPosition);
                 }
                 else if (moveDirection == 1)
                 {
-                    originPosition = new Vector3(originPosition.x, originPosition.y, originPosition.z + moveSpeed);
-                    this.transform.LookAt(originPosition);
-                    this.GetComponent<Rigidbody>().MovePosition(originPosition);
+                    //originPosition = new Vector3(originPosition.x, originPosition.y, originPosition.z + 5);
+                    //this.transform.LookAt(originPosition);
+                    //this.GetComponent<Rigidbody>().MovePosition(originPosition);
+                    m_Move = new Vector3(moveSpeed, 0, 0);
                 }
                 else if (moveDirection == 2)
                 {
-                    originPosition = new Vector3(originPosition.x, originPosition.y, originPosition.z - moveSpeed);
-                    this.transform.LookAt(originPosition);
-                    this.GetComponent<Rigidbody>().MovePosition(originPosition);
+                    //originPosition = new Vector3(originPosition.x, originPosition.y, originPosition.z - 5);
+                    //this.transform.LookAt(originPosition);
+                    //this.GetComponent<Rigidbody>().MovePosition(originPosition);
+                    m_Move = new Vector3(-moveSpeed, 0, 0);
                 }
                 else if (moveDirection == 3)
                 {
-                    originPosition = new Vector3(originPosition.x + moveSpeed, originPosition.y, originPosition.z);
-                    this.transform.LookAt(originPosition);
-                    this.GetComponent<Rigidbody>().MovePosition(originPosition);
+                    //originPosition = new Vector3(originPosition.x + 5, originPosition.y, originPosition.z);
+                    //this.transform.LookAt(originPosition);
+                    //this.GetComponent<Rigidbody>().MovePosition(originPosition);
+                    m_Move = new Vector3(0, 0, moveSpeed);
                 }
                 else if (moveDirection == 4)
                 {
-                    originPosition = new Vector3(originPosition.x - moveSpeed, originPosition.y, originPosition.z);
-                    this.transform.LookAt(originPosition);
-                    this.GetComponent<Rigidbody>().MovePosition(originPosition);
+                    //originPosition = new Vector3(originPosition.x - 5, originPosition.y, originPosition.z);
+                    //this.transform.LookAt(originPosition);
+                    //this.GetComponent<Rigidbody>().MovePosition(originPosition);
+                    m_Move = new Vector3(0, 0, -moveSpeed);
                 }
+                m_Character.Move(m_Move, false, false);
             }
         }
     }
 
     void OnGUI()
     {
-        if (enabled) { 
+        if (enabled)
+        {
             if (healthBarEnabled)
             {
                 Vector3 screenPos = Camera.main.WorldToScreenPoint(this.gameObject.transform.position);
@@ -117,21 +135,24 @@ public class Enemy : MonoBehaviour {
 
                 GUI.color = Color.black;
                 GUI.DrawTexture(new Rect(screenPos.x - healthBarLength / 2, screenPos.y, healthBarLength, 10), tex);
-                if (health > 0) { 
+                if (health > 0)
+                {
                     GUI.color = Color.green;
-                    GUI.DrawTexture(new Rect(screenPos.x - healthBarLength / 2 + 1, screenPos.y + 1, healthBarLength/maxHealth * health - 2, 8), tex);
+                    GUI.DrawTexture(new Rect(screenPos.x - healthBarLength / 2 + 1, screenPos.y + 1, healthBarLength / maxHealth * health - 2, 8), tex);
                 }
             }
         }
     }
 
-    public void takeDamage (int damage)
+    public void TakeDamage(int damage)
     {
         healthBarEnabled = true;
-        if (health - damage > 0) { 
+        if (health - damage > 0)
+        {
             health -= damage;
         }
-        else {
+        else
+        {
             health = 0;
         }
     }
@@ -145,34 +166,5 @@ public class Enemy : MonoBehaviour {
     {
         this.gameObject.transform.GetComponent<Rigidbody>().isKinematic = true;
         //this.gameObject.transform.GetComponent<Rigidbody>().detectCollisions = false;
-    }
-
-    public virtual void OnCollisionEnter(Collision collision)
-    {
-        CollisionResult();
-    }
-
-    protected void CollisionResult()
-    {
-        //Debug.Log("This object has hit " + collider.gameObject.name);
-        Vector3 originPosition = this.transform.position;
-        if (moveDirection == 1)
-        {
-            originPosition = new Vector3(originPosition.x, originPosition.y, originPosition.z - moveSpeed * 2);
-        }
-        else if (moveDirection == 2)
-        {
-            originPosition = new Vector3(originPosition.x, originPosition.y, originPosition.z + moveSpeed * 2);
-        }
-        else if (moveDirection == 3)
-        {
-            originPosition = new Vector3(originPosition.x - moveSpeed * 2, originPosition.y, originPosition.z);
-        }
-        else if (moveDirection == 4)
-        {
-            originPosition = new Vector3(originPosition.x + moveSpeed * 2, originPosition.y, originPosition.z);
-        }
-        this.transform.position = originPosition;
-        moveDirection = 0;
     }
 }
