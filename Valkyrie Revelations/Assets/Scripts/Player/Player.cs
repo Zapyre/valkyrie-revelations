@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityStandardAssets.CrossPlatformInput;
 using UnityStandardAssets.Characters.ThirdPerson;
@@ -27,6 +28,8 @@ public class Player : MonoBehaviour
     private bool playerDead;
     private bool incover;
 
+    //Weapons Loadout
+    private ArrayList weaponList;
 
     private void Start()
     {
