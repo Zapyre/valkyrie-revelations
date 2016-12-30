@@ -3,11 +3,13 @@ using System.Collections;
 
 public class ProjectileMovement : MonoBehaviour
 {
-    GameObject projectile;
-    Rigidbody rbody;
-    Vector3 destination;
-    Vector3 speed;
-    bool forceAdded;
+    private GameObject projectile;
+    private Rigidbody rbody;
+    private Vector3 destination;
+    private Vector3 speed;
+    private bool forceAdded;
+    private int damage;
+
     // Use this for initialization
     void Awake()
     {
@@ -15,6 +17,7 @@ public class ProjectileMovement : MonoBehaviour
         rbody = this.GetComponent<Rigidbody>();
         destination = this.gameObject.transform.position;
         forceAdded = true;
+        damage = 10;
     }
 
     // Update is called once per frame
@@ -75,7 +78,7 @@ public class ProjectileMovement : MonoBehaviour
         Player player = collision.gameObject.GetComponent<Player>();
         if (enemy != null)
         {
-            enemy.TakeDamage(10);
+            enemy.TakeDamage(damage);
         }
         else if (player != null)
         {
@@ -84,5 +87,10 @@ public class ProjectileMovement : MonoBehaviour
 
         rbody.isKinematic = true;
         LevelManager.Destroy(projectile, 0.0001f);
+    }
+
+    public void setDamage (int dmg)
+    {
+        damage = dmg;
     }
 }

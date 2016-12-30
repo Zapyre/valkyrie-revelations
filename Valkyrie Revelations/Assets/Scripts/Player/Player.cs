@@ -26,10 +26,10 @@ public class Player : MonoBehaviour
     private float maxHealth;
     private float health;
     private bool playerDead;
-    private bool incover;
 
     //Weapons Loadout
     private ArrayList weaponList;
+    private Weapon equippedWeapon;
 
     private void Start()
     {
@@ -48,10 +48,17 @@ public class Player : MonoBehaviour
         maxHealth = 100;
         health = 100;
         playerDead = false;
-        incover = false;
 
         mainCamera.enabled = true;
         coverCamera.enabled = false;
+
+        // Weapons initialization
+        weaponList = new ArrayList();
+        Weapon pistol = new Pistol();
+        Weapon machineGun = new MachineGun();
+        weaponList.Add(pistol);
+        weaponList.Add(machineGun);
+        equippedWeapon = (Weapon)weaponList[0];
     }
 
 
@@ -95,20 +102,14 @@ public class Player : MonoBehaviour
 
             if (Physics.Raycast(ray, out hit, 100))
             {
-                //Debug.Log(hit.point + " | You shot at " + hit.transform.gameObject.name);
-                // Create bullet
-                Projectile projectile = new Projectile(this.transform.FindChild("Gunpoint").position);
-                GameObject bullet = projectile.projectileObj;
-                ProjectileMovement pm = (ProjectileMovement)bullet.GetComponent(typeof(ProjectileMovement));
-                if (hit.point != null)
+                if (equippedWeapon.GetAmmoInClip() <= 0)
                 {
-                    pm.SetDestination(hit.point);
-                    pm.CalculateSpeed(2000.0f);
+                    Debug.Log("Reload Weapon!");
                 }
-                //((ParticleSystem)bullet.GetComponentInChildren(typeof(ParticleSystem))).Play();
-                //GameObject bullet = GameObject.CreatePrimative(PrimativeType.Sphere);
+                else { 
+                    cooldown = equippedWeapon.ShootWeapon(hit, this.transform);
+                }
             }
-            cooldown = 0.1f;
         }
         cooldown -= Time.deltaTime;
 
@@ -202,6 +203,7 @@ public class Player : MonoBehaviour
 
         if (crouch)
         {
+            equippedWeapon.Reload();
             mainCamera.enabled = false;
             coverCamera.enabled = true;
         }
@@ -217,7 +219,7 @@ public class Player : MonoBehaviour
         Texture2D tex = new Texture2D(1, 1, TextureFormat.ARGB32, false);
         GUI.color = Color.black;
         GUI.DrawTexture(new Rect(10, Screen.height - 32, healthBarLength, 20), tex);
-        if (incover)
+        if (crouch)
         {
             GUI.color = Color.blue;
         }
@@ -225,13 +227,41 @@ public class Player : MonoBehaviour
         {
             GUI.color = Color.green;
         }
-        GUI.Label(new Rect(10, Screen.height - 52, healthBarLength, 20), "Your Health");
+
+        GUIStyle leftStyle = GUI.skin.GetStyle("Label");
+        leftStyle.alignment = TextAnchor.UpperLeft;
+        GUI.Label(new Rect(10, Screen.height - 52, healthBarLength, 20), "Your Health", leftStyle);
         GUI.DrawTexture(new Rect(11, Screen.height - 31, healthBarLength / maxHealth * health - 2, 18), tex);
+
+        GUI.color = Color.white;
+        GUIStyle centeredStyle = GUI.skin.GetStyle("Label");
+        centeredStyle.alignment = TextAnchor.UpperCenter;
+        GUI.Box(new Rect(Screen.width - 100, Screen.height - 50, 100, 50), "Ammo");
+        GUI.Label(new Rect(Screen.width - 100, Screen.height - 20, 100, 20), equippedWeapon.GetAmmoInClip() + "/" + equippedWeapon.GetMaxAmmoInClip(), centeredStyle);
+
+        if (crouch) {
+            int i = 0;
+            foreach (Weapon weapon in weaponList) {
+                if (equippedWeapon == weapon)
+                {
+                    GUI.color = Color.green;
+                }
+                else
+                {
+                    GUI.color = Color.white;
+                }
+                if (GUI.Button(new Rect(Screen.width / 2 / weaponList.Count * i + Screen.width / 4, Screen.height - Screen.height / 4, Screen.width / 2 / weaponList.Count, Screen.height / 4), weapon.GetName()))
+                {
+                    equippedWeapon = weapon;
+                }
+                i++;
+            }
+        }
     }
 
     public void TakeDamage(int damage)
     {
-        if (!incover && !LevelManager.moveToNextArea)
+        if (!crouch && !LevelManager.moveToNextArea)
         {
             if (health - damage > 0)
             {
