@@ -11,5 +11,6 @@ public class Pistol : Weapon {
         coolDown = 0.2f;
         maxAmmoInClip = 10;
         ammoInClip = maxAmmoInClip;
+        totalAmmo = -1;
     }
 }

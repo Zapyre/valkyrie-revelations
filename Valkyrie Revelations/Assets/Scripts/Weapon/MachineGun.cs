@@ -11,5 +11,6 @@ public class MachineGun : Weapon {
         coolDown = 0.1f;
         maxAmmoInClip = 50;
         ammoInClip = maxAmmoInClip;
+        totalAmmo = 300;
     }
 }

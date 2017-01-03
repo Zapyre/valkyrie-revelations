@@ -236,8 +236,25 @@ public class Player : MonoBehaviour
         GUI.color = Color.white;
         GUIStyle centeredStyle = GUI.skin.GetStyle("Label");
         centeredStyle.alignment = TextAnchor.UpperCenter;
-        GUI.Box(new Rect(Screen.width - 100, Screen.height - 50, 100, 50), "Ammo");
-        GUI.Label(new Rect(Screen.width - 100, Screen.height - 20, 100, 20), equippedWeapon.GetAmmoInClip() + "/" + equippedWeapon.GetMaxAmmoInClip(), centeredStyle);
+        String totalAmmo = equippedWeapon.GetTotalAmmo() + "";
+        if (equippedWeapon.GetTotalAmmo() == -1)
+        {
+            totalAmmo = "Infinite";
+        }
+        else if (equippedWeapon.GetTotalAmmo() == 0)
+        {
+            GUI.color = Color.red;
+        }
+        GUI.Box(new Rect(Screen.width - 200, Screen.height - 80, 200, 40), "Total Ammo Remaining");
+        GUI.Label(new Rect(Screen.width - 200, Screen.height - 60, 200, 20), totalAmmo, centeredStyle);
+
+        GUI.color = Color.white;
+        if (equippedWeapon.GetAmmoInClip() == 0)
+        {
+            GUI.color = Color.red;
+        }
+        GUI.Box(new Rect(Screen.width - 200, Screen.height - 40, 200, 40), "Ammo");
+        GUI.Label(new Rect(Screen.width - 200, Screen.height - 20, 200, 20), equippedWeapon.GetAmmoInClip() + "/" + equippedWeapon.GetMaxAmmoInClip(), centeredStyle);
 
         if (crouch) {
             int i = 0;

@@ -57,7 +57,6 @@ public class Enemy : MonoBehaviour
             }
             if (!enemyDead)
             {
-
                 Vector3 originPosition = this.transform.position;
                 shootBulletTime -= Time.deltaTime;
                 if (shootBulletTime <= 0)
@@ -128,7 +127,7 @@ public class Enemy : MonoBehaviour
     {
         if (enabled)
         {
-            if (healthBarEnabled)
+            if (healthBarEnabled && !enemyDead)
             {
                 Vector3 screenPos = Camera.main.WorldToScreenPoint(this.gameObject.transform.position);
                 Texture2D tex = new Texture2D(1, 1, TextureFormat.ARGB32, false);
@@ -159,6 +158,8 @@ public class Enemy : MonoBehaviour
 
     protected void EnableRagdoll()
     {
+        //this.gameObject.GetComponent<Animator>().enabled = false;
+        this.gameObject.GetComponent<ThirdPersonCharacter>().enabled = false;
         this.gameObject.GetComponent<Rigidbody>().isKinematic = false;
         //this.gameObject.GetComponent<Rigidbody>().detectCollisions = false;
     }

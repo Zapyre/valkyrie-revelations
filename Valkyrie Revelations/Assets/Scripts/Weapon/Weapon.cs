@@ -9,6 +9,7 @@ public class Weapon {
     protected float coolDown;
     protected int maxAmmoInClip;
     protected int ammoInClip;
+    protected int totalAmmo;
 
     public string GetName()
     {
@@ -38,9 +39,33 @@ public class Weapon {
     {
         return ammoInClip;
     }
-    public void Reload()
+    public bool Reload()
     {
-        ammoInClip = maxAmmoInClip;
+        int reloadAmmo = maxAmmoInClip - ammoInClip;
+        if (totalAmmo == -1)
+        {
+            ammoInClip = maxAmmoInClip;
+        }
+        else if (totalAmmo == 0)
+        {
+            totalAmmo = 0;
+            return false;
+        }
+        else if (totalAmmo >= reloadAmmo)
+        {
+            totalAmmo -= reloadAmmo;
+            ammoInClip = maxAmmoInClip;
+        }
+        else
+        {
+            ammoInClip += totalAmmo;
+            totalAmmo = 0;
+        }
+        return true;
+    }
+    public int GetTotalAmmo()
+    {
+        return totalAmmo;
     }
 
     public virtual float ShootWeapon(RaycastHit hit, Transform transform)
