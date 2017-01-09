@@ -31,6 +31,9 @@ public class Player : MonoBehaviour
     private ArrayList weaponList;
     private Weapon equippedWeapon;
 
+    //Camera Rotation Speed
+    private float camRotSpeed;
+
     private void Start()
     {
         // get the third person character ( this should never be null due to require component )
@@ -59,11 +62,17 @@ public class Player : MonoBehaviour
         weaponList.Add(pistol);
         weaponList.Add(machineGun);
         equippedWeapon = (Weapon)weaponList[0];
+
+        // Enable phone view rotation
+        Input.gyro.enabled = true;
+        camRotSpeed = 0.5f;
     }
 
 
     private void Update()
     {
+        mainCamera.transform.Rotate(-Input.gyro.rotationRateUnbiased.x * camRotSpeed, -Input.gyro.rotationRateUnbiased.y * camRotSpeed, 0);
+
         if (!m_Jump)
         {
             m_Jump = CrossPlatformInputManager.GetButtonDown("Jump");
