@@ -110,6 +110,11 @@ public class Player : MonoBehaviour
                     cooldown = equippedWeapon.ShootWeapon(hit, this.transform);
                 }
             }
+
+            if (!equippedWeapon.IsRapidFire())
+            {
+                shooting = false;
+            }
         }
         cooldown -= Time.deltaTime;
 
@@ -244,17 +249,23 @@ public class Player : MonoBehaviour
         else if (equippedWeapon.GetTotalAmmo() == 0)
         {
             GUI.color = Color.red;
+            GUI.Box(new Rect(Screen.width - 200, Screen.height - 80, 200, 40), "No Ammo Remaining");
         }
-        GUI.Box(new Rect(Screen.width - 200, Screen.height - 80, 200, 40), "Total Ammo Remaining");
-        GUI.Label(new Rect(Screen.width - 200, Screen.height - 60, 200, 20), totalAmmo, centeredStyle);
+        else { 
+            GUI.Box(new Rect(Screen.width - 200, Screen.height - 80, 200, 40), "Total Ammo Remaining");
+            GUI.Label(new Rect(Screen.width - 200, Screen.height - 60, 200, 20), totalAmmo, centeredStyle);
+        }
 
-        GUI.color = Color.white;
         if (equippedWeapon.GetAmmoInClip() == 0)
         {
             GUI.color = Color.red;
+            GUI.Box(new Rect(Screen.width - 200, Screen.height - 40, 200, 40), "Reload!");
         }
-        GUI.Box(new Rect(Screen.width - 200, Screen.height - 40, 200, 40), "Ammo");
-        GUI.Label(new Rect(Screen.width - 200, Screen.height - 20, 200, 20), equippedWeapon.GetAmmoInClip() + "/" + equippedWeapon.GetMaxAmmoInClip(), centeredStyle);
+        else {
+            GUI.color = Color.white;
+            GUI.Box(new Rect(Screen.width - 200, Screen.height - 40, 200, 40), "Ammo");
+            GUI.Label(new Rect(Screen.width - 200, Screen.height - 20, 200, 20), equippedWeapon.GetAmmoInClip() + "/" + equippedWeapon.GetMaxAmmoInClip(), centeredStyle);
+        }
 
         if (crouch) {
             int i = 0;
