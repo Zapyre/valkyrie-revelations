@@ -33,6 +33,8 @@ public class Player : MonoBehaviour
 
     //Camera Rotation Speed
     private float camRotSpeed;
+    private float gyroSensitivityUp;
+    private float gyroSensitivityDown;
 
     private void Start()
     {
@@ -66,12 +68,25 @@ public class Player : MonoBehaviour
         // Enable phone view rotation
         Input.gyro.enabled = true;
         camRotSpeed = 0.5f;
+        gyroSensitivityUp = 0.35f;
+        gyroSensitivityDown = 0.45f;
     }
 
 
     private void Update()
     {
-        mainCamera.transform.Rotate(-Input.gyro.rotationRateUnbiased.x * camRotSpeed, -Input.gyro.rotationRateUnbiased.y * camRotSpeed, 0);
+        // Gyro Controls
+        this.gameObject.transform.Rotate( 0, -Input.gyro.rotationRateUnbiased.y * camRotSpeed, 0);
+        if (Input.gyro.attitude.y < gyroSensitivityUp)
+        {
+            crouch = false;
+        }
+        else if (Input.gyro.attitude.y > gyroSensitivityDown)
+        {
+            crouch = true;
+        }
+
+
 
         if (!m_Jump)
         {
@@ -191,8 +206,9 @@ public class Player : MonoBehaviour
         // read inputs
         //float h = CrossPlatformInputManager.GetAxis("Horizontal");
         //float v = CrossPlatformInputManager.GetAxis("Vertical");
-        crouch = Input.GetKey(KeyCode.C);
-
+#if !MOBILE_INPUT
+       //crouch = Input.GetKey(KeyCode.C);
+#endif
         // Removing this for on rails movement
         // calculate move direction to pass to character
         /*if (m_Cam != null)
@@ -230,6 +246,11 @@ public class Player : MonoBehaviour
 
     void OnGUI()
     {
+        // Debugging section
+        //GUI.color = Color.white;
+        //GUI.Box(new Rect(0, 0, 200, 50), "Tilt : " + Input.gyro.attitude);
+
+        // Actual GUI
         Texture2D tex = new Texture2D(1, 1, TextureFormat.ARGB32, false);
         GUI.color = Color.black;
         GUI.DrawTexture(new Rect(10, Screen.height - 32, healthBarLength, 20), tex);
