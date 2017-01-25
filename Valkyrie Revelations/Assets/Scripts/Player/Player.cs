@@ -207,7 +207,7 @@ public class Player : MonoBehaviour
         //float h = CrossPlatformInputManager.GetAxis("Horizontal");
         //float v = CrossPlatformInputManager.GetAxis("Vertical");
 #if !MOBILE_INPUT
-       //crouch = Input.GetKey(KeyCode.C);
+       crouch = Input.GetKey(KeyCode.C);
 #endif
         // Removing this for on rails movement
         // calculate move direction to pass to character

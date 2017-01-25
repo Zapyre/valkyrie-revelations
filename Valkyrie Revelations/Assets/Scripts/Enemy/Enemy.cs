@@ -62,13 +62,13 @@ public class Enemy : MonoBehaviour
                 if (shootBulletTime <= 0)
                 {
                     Vector3 destinationPosition = LevelManager.GetPlayer().transform.position;
-                    destinationPosition = new Vector3(destinationPosition.x, destinationPosition.y + 1.5f, destinationPosition.z);
+                    destinationPosition = new Vector3(destinationPosition.x, destinationPosition.y + 1.0f, destinationPosition.z);
                     this.transform.LookAt(destinationPosition);
-                    Projectile projectile = new Projectile(this.transform.FindChild("Gunpoint").transform.position);
+                    Projectile projectile = new Projectile(this.transform.FindChild("Gunpoint").transform.position, true);
                     GameObject bullet = projectile.projectileObj;
                     ProjectileMovement pm = (ProjectileMovement)bullet.GetComponent(typeof(ProjectileMovement));
                     pm.SetDestination(destinationPosition);
-                    pm.CalculateSpeed(500.0f);
+                    pm.CalculateSpeed(1000.0f);
 
                     shootBulletTime = Random.Range(3.0f, 5.0f);
 

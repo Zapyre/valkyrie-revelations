@@ -70,7 +70,7 @@ public class Weapon {
 
     public virtual float ShootWeapon(RaycastHit hit, Transform transform)
     {
-        Projectile projectile = new Projectile(transform.FindChild("Gunpoint").position);
+        Projectile projectile = new Projectile(transform.FindChild("Gunpoint").position, false);
         GameObject bullet = projectile.projectileObj;
         ProjectileMovement pm = (ProjectileMovement)bullet.GetComponent(typeof(ProjectileMovement));
         if (hit.point != null)
