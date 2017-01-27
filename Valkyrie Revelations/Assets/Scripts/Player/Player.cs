@@ -35,6 +35,8 @@ public class Player : MonoBehaviour
     private float camRotSpeed;
     private float gyroSensitivityUp;
     private float gyroSensitivityDown;
+    private float shakeCamera;
+    private bool shakeLeft;
 
     private void Start()
     {
@@ -69,132 +71,131 @@ public class Player : MonoBehaviour
         Input.gyro.enabled = true;
         camRotSpeed = 0.5f;
         gyroSensitivityUp = 0.35f;
-        gyroSensitivityDown = 0.45f;
+        gyroSensitivityDown = 0.40f;
+        shakeCamera = 0.0f;
+        shakeLeft = true;
     }
 
 
     private void Update()
     {
-        // Gyro Controls
-        this.gameObject.transform.Rotate( 0, -Input.gyro.rotationRateUnbiased.y * camRotSpeed, 0);
-        if (Input.gyro.attitude.y < gyroSensitivityUp)
+        if (!LevelManager.pause)
         {
-            crouch = false;
-        }
-        else if (Input.gyro.attitude.y > gyroSensitivityDown)
-        {
-            crouch = true;
-        }
-
-
-
-        if (!m_Jump)
-        {
-            m_Jump = CrossPlatformInputManager.GetButtonDown("Jump");
-        }
-
-        if (Input.touchCount > 0)
-        {
-            Touch myTouch = Input.touches[0];
-
-            //Check if the phase of that touch equals Began
-            if (myTouch.phase == TouchPhase.Began)
+            if (!m_Jump)
             {
-                //If so, set touchOrigin to the position of that touch
-                Vector2 touchOrigin = myTouch.position;
-                shooting = true;
+                m_Jump = CrossPlatformInputManager.GetButtonDown("Jump");
             }
-        }
-        else
-        {
-            //shooting = false;
-        }
 
-        if (Input.GetMouseButtonDown(0))
-        {
-            shooting = true;
-        }
-        if (Input.GetMouseButtonUp(0))
-        {
-            shooting = false;
-        }
-
-        if (shooting && cooldown < 0 && !crouch)
-        {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-
-            if (Physics.Raycast(ray, out hit, 100))
+            if (Input.touchCount > 0)
             {
-                if (equippedWeapon.GetAmmoInClip() <= 0)
+                Touch myTouch = Input.touches[0];
+
+                //Check if the phase of that touch equals Began
+                if (myTouch.phase == TouchPhase.Began)
                 {
-                    Debug.Log("Reload Weapon!");
+                    //If so, set touchOrigin to the position of that touch
+                    Vector2 touchOrigin = myTouch.position;
+                    shooting = true;
                 }
-                else { 
-                    cooldown = equippedWeapon.ShootWeapon(hit, this.transform);
-                }
-            }
-
-            if (!equippedWeapon.IsRapidFire())
-            {
-                shooting = false;
-            }
-        }
-        cooldown -= Time.deltaTime;
-
-        Area area = LevelManager.GetCurrentArea();
-        if (area != null && LevelManager.moveToNextArea) {
-            if (transform.position == area.nextPosition) // Arrival at new stage
-            {
-                transform.LookAt(area.nextLookAt);
-                LevelManager.SetupNextArea();
             }
             else
             {
-                Vector3 knightPos = transform.position;
-                Vector3 newKnightPos = area.nextPosition;
+                //shooting = false;
+            }
 
-                if (knightPos != newKnightPos)
+            if (Input.GetMouseButtonDown(0))
+            {
+                shooting = true;
+            }
+            if (Input.GetMouseButtonUp(0))
+            {
+                shooting = false;
+            }
+
+            if (shooting && cooldown < 0 && !crouch)
+            {
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                RaycastHit hit;
+
+                if (Physics.Raycast(ray, out hit, 100))
                 {
-                    float increment = 0.1f;
-                    float x = knightPos.x - newKnightPos.x;
-                    float y = knightPos.y - newKnightPos.y;
-                    float z = knightPos.z - newKnightPos.z;
-
-                    float newX = newKnightPos.x;
-                    float newY = newKnightPos.y;
-                    float newZ = newKnightPos.z;
-
-                    if (x < -increment)
+                    if (equippedWeapon.GetAmmoInClip() <= 0)
                     {
-                        newX = knightPos.x + increment;
+                        Debug.Log("Reload Weapon!");
                     }
-                    else if (x > increment)
+                    else
                     {
-                        newX = knightPos.x - increment;
+                        cooldown = equippedWeapon.ShootWeapon(hit, this.transform);
                     }
-                    if (y < -increment)
-                    {
-                        newY = knightPos.y + increment;
-                    }
-                    else if (y > increment)
-                    {
-                        newY = knightPos.y - increment;
-                    }
-                    if (z < -increment)
-                    {
-                        newZ = knightPos.z + increment;
-                    }
-                    else if (z > increment)
-                    {
-                        newZ = knightPos.z - increment;
-                    }
-
-                    // Need to redo this positional
-                    Vector3 newPos = new Vector3(newX, newY, newZ);
-                    transform.LookAt(newPos);
-                    transform.position = newPos;
                 }
+
+                if (!equippedWeapon.IsRapidFire())
+                {
+                    shooting = false;
+                }
+            }
+            cooldown -= Time.deltaTime;
+
+            Area area = LevelManager.GetCurrentArea();
+            if (area != null && LevelManager.moveToNextArea)
+            {
+                if (transform.position == area.nextPosition) // Arrival at new stage
+                {
+                    transform.LookAt(area.nextLookAt);
+                    LevelManager.SetupNextArea();
+                }
+                else
+                {
+                    Vector3 knightPos = transform.position;
+                    Vector3 newKnightPos = area.nextPosition;
+
+                    if (knightPos != newKnightPos)
+                    {
+                        float increment = 0.1f;
+                        float x = knightPos.x - newKnightPos.x;
+                        float y = knightPos.y - newKnightPos.y;
+                        float z = knightPos.z - newKnightPos.z;
+
+                        float newX = newKnightPos.x;
+                        float newY = newKnightPos.y;
+                        float newZ = newKnightPos.z;
+
+                        if (x < -increment)
+                        {
+                            newX = knightPos.x + increment;
+                        }
+                        else if (x > increment)
+                        {
+                            newX = knightPos.x - increment;
+                        }
+                        if (y < -increment)
+                        {
+                            newY = knightPos.y + increment;
+                        }
+                        else if (y > increment)
+                        {
+                            newY = knightPos.y - increment;
+                        }
+                        if (z < -increment)
+                        {
+                            newZ = knightPos.z + increment;
+                        }
+                        else if (z > increment)
+                        {
+                            newZ = knightPos.z - increment;
+                        }
+
+                        // Need to redo this positional
+                        Vector3 newPos = new Vector3(newX, newY, newZ);
+                        transform.LookAt(newPos);
+                        transform.position = newPos;
+                    }
+                }
+            }
+
+            if (shakeCamera > 0)
+            {
+                CameraShake();
             }
         }
     }
@@ -203,52 +204,49 @@ public class Player : MonoBehaviour
     // Fixed update is called in sync with physics
     private void FixedUpdate()
     {
-        // read inputs
-        //float h = CrossPlatformInputManager.GetAxis("Horizontal");
-        //float v = CrossPlatformInputManager.GetAxis("Vertical");
-#if !MOBILE_INPUT
-       crouch = Input.GetKey(KeyCode.C);
-#endif
-        // Removing this for on rails movement
-        // calculate move direction to pass to character
-        /*if (m_Cam != null)
+        if (!LevelManager.pause)
         {
-            // calculate camera relative direction to move:
-            m_CamForward = Vector3.Scale(m_Cam.forward, new Vector3(1, 0, 1)).normalized;
-            m_Move = v*m_CamForward + h*m_Cam.right;
-        }
-        else
-        {
-            // we use world-relative directions in the case of no main camera
-            m_Move = v*Vector3.forward + h*Vector3.right;
-        }*/
+            // read inputs
+            //float h = CrossPlatformInputManager.GetAxis("Horizontal");
+            //float v = CrossPlatformInputManager.GetAxis("Vertical");
+            this.gameObject.transform.Rotate(0, -Input.gyro.rotationRateUnbiased.y * camRotSpeed, 0);
 #if !MOBILE_INPUT
-		// walk speed multiplier
-	    if (Input.GetKey(KeyCode.LeftShift)) m_Move *= 0.5f;
+            crouch = Input.GetKey(KeyCode.C);
+#else
+            // Gyro Controls
+            if (Mathf.Abs(Input.gyro.attitude.y) < gyroSensitivityUp)
+            {
+                crouch = false;
+            }
+            else if (Mathf.Abs(Input.gyro.attitude.y) > gyroSensitivityDown)
+            {
+                crouch = true;
+            }
 #endif
 
-        // pass all parameters to the character control script
-        m_Character.Move(m_Move, crouch, m_Jump);
-        m_Jump = false;
+            // pass all parameters to the character control script
+            m_Character.Move(m_Move, crouch, m_Jump);
+            m_Jump = false;
 
-        if (crouch)
-        {
-            equippedWeapon.Reload();
-            mainCamera.enabled = false;
-            coverCamera.enabled = true;
-        }
-        else
-        {
-            mainCamera.enabled = true;
-            coverCamera.enabled = false;
+            if (crouch)
+            {
+                equippedWeapon.Reload();
+                mainCamera.enabled = false;
+                coverCamera.enabled = true;
+            }
+            else
+            {
+                mainCamera.enabled = true;
+                coverCamera.enabled = false;
+            }
         }
     }
 
     void OnGUI()
     {
         // Debugging section
-        //GUI.color = Color.white;
-        //GUI.Box(new Rect(0, 0, 200, 50), "Tilt : " + Input.gyro.attitude);
+        GUI.color = Color.white;
+        GUI.Box(new Rect(0, 0, 200, 50), "Tilt : " + Input.gyro.attitude);
 
         // Actual GUI
         Texture2D tex = new Texture2D(1, 1, TextureFormat.ARGB32, false);
@@ -281,7 +279,8 @@ public class Player : MonoBehaviour
             GUI.color = Color.red;
             GUI.Box(new Rect(Screen.width - 200, Screen.height - 80, 200, 40), "No Ammo Remaining");
         }
-        else { 
+        else
+        {
             GUI.Box(new Rect(Screen.width - 200, Screen.height - 80, 200, 40), "Total Ammo Remaining");
             GUI.Label(new Rect(Screen.width - 200, Screen.height - 60, 200, 20), totalAmmo, centeredStyle);
         }
@@ -291,15 +290,18 @@ public class Player : MonoBehaviour
             GUI.color = Color.red;
             GUI.Box(new Rect(Screen.width - 200, Screen.height - 40, 200, 40), "Reload!");
         }
-        else {
+        else
+        {
             GUI.color = Color.white;
             GUI.Box(new Rect(Screen.width - 200, Screen.height - 40, 200, 40), "Ammo");
             GUI.Label(new Rect(Screen.width - 200, Screen.height - 20, 200, 20), equippedWeapon.GetAmmoInClip() + "/" + equippedWeapon.GetMaxAmmoInClip(), centeredStyle);
         }
 
-        if (crouch) {
+        if (crouch)
+        {
             int i = 0;
-            foreach (Weapon weapon in weaponList) {
+            foreach (Weapon weapon in weaponList)
+            {
                 if (equippedWeapon == weapon)
                 {
                     GUI.color = Color.green;
@@ -315,6 +317,25 @@ public class Player : MonoBehaviour
                 i++;
             }
         }
+
+        GUI.color = Color.white;
+        if (LevelManager.pause)
+        {
+            if (GUI.Button(new Rect(Screen.width / 4 * 3, 0, Screen.width / 4, Screen.height / 4), "Resume Game"))
+            {
+                LevelManager.pause = false;
+                Time.timeScale = 1;
+            }
+        }
+        else
+        {
+            if (GUI.Button(new Rect(Screen.width / 4 * 3, 0, Screen.width / 4, Screen.height / 4), "Pause Game"))
+            {
+                LevelManager.pause = true;
+                Time.timeScale = 0;
+            }
+        }
+        
     }
 
     public void TakeDamage(int damage)
@@ -324,10 +345,34 @@ public class Player : MonoBehaviour
             if (health - damage > 0)
             {
                 health -= damage;
+                shakeCamera = 1.0f;
             }
             else
             {
                 health = 0;
+            }
+        }
+    }
+
+    private void CameraShake()
+    {
+        if (shakeLeft) { 
+            mainCamera.transform.Rotate(new Vector3(1, 0, 0));
+            shakeLeft = false;
+        }
+        else
+        {
+            mainCamera.transform.Rotate(new Vector3(-1, 0, 0));
+            shakeLeft = true;
+        }
+        shakeCamera -= Time.deltaTime;
+        if (shakeCamera <= 0)
+        {
+            shakeCamera = 0;
+            if (!shakeLeft)
+            {
+                mainCamera.transform.Rotate(new Vector3(-1, 0, 0));
+                shakeLeft = true;
             }
         }
     }

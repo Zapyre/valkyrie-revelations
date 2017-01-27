@@ -16,6 +16,8 @@ public class LevelManager : MonoBehaviour {
 
     private float textAnimTime;
 
+    public static bool pause;
+
     // Use this for initialization
     void Start () {
         //mainLight = (Light)GameObject.Find("Main Light").GetComponent("Light");
@@ -54,11 +56,15 @@ public class LevelManager : MonoBehaviour {
         moveToNextArea = false;
 
         textAnimTime = 6.0f;
+
+        pause = true;
+        Time.timeScale = 0;
     }
 	
 	// Update is called once per frame
 	void Update () {
-        if (moveToNextArea) {
+        if (moveToNextArea)
+        {
             if (GetCurrentArea() == null)
             {
                 Debug.Log("You have completed the level!");
@@ -95,7 +101,8 @@ public class LevelManager : MonoBehaviour {
             {
                 GUI.Label(new Rect(Screen.width / 2 - 50, 0, 100, 20), "Level Complete!");
             }
-            else if (GetCurrentArea().areaNotes != null) {
+            else if (GetCurrentArea().areaNotes != null)
+            {
                 GUI.Label(new Rect(Screen.width / 2 - 50, 0, 100, 20), GetCurrentArea().areaNotes);
             }
         }
