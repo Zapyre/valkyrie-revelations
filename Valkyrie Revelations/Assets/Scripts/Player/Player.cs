@@ -212,6 +212,14 @@ public class Player : MonoBehaviour
             this.gameObject.transform.Rotate(0, -Input.gyro.rotationRateUnbiased.y * camRotSpeed, 0);
 #if !MOBILE_INPUT
             crouch = Input.GetKey(KeyCode.C);
+            if (Input.GetKey(KeyCode.A))
+            {
+                this.gameObject.transform.Rotate(0, -0.5f, 0);
+            }
+            if (Input.GetKey(KeyCode.D))
+            {
+                this.gameObject.transform.Rotate(0, 0.5f, 0);
+            }
 #else
             // Gyro Controls
             if (Mathf.Abs(Input.gyro.attitude.y) < gyroSensitivityUp)
@@ -345,7 +353,7 @@ public class Player : MonoBehaviour
             if (health - damage > 0)
             {
                 health -= damage;
-                shakeCamera = 1.0f;
+                shakeCamera = 0.5f;
             }
             else
             {

@@ -27,9 +27,9 @@ public class LevelManager : MonoBehaviour {
 
         // Area initialization
         areaList = new ArrayList();
-        Area a = new Area(new Vector3(0, 0, 2), new Vector3(3, 0, 0), 3, new Vector3(2, 0, 0), new Vector3(3,0,0));
+        Area a = new Area(new Vector3(0, 0, 2), new Vector3(3, 0, 0), 3, new Vector3(0, 0, 40), new Vector3(0,0,41));
         areaList.Add(a);
-        Area b = new Area(new Vector3(0, 0, 2), new Vector3(3, 0, 0), 3, new Vector3(0, 0, 28), new Vector3(1, 0, 28));
+        Area b = new Area(new Vector3(0, 0, 2), new Vector3(3, 0, 0), 3, new Vector3(0, 0, 40), new Vector3(1, 0, 28));
         areaList.Add(b);
         /*Area b = new Area(new Vector3(2, 0, 0), new Vector3(0, 0, 3), 6, new Vector3(28, 0, 28), new Vector3(28, 0, 29));
         areaList.Add(b);
