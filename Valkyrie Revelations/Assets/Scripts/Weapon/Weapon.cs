@@ -1,10 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+public enum WeaponType { SINGLESHOT, RAPIDFIRE, CHARGINGCANNON }
+
 public class Weapon {
     protected string name;
     protected Texture weaponTex;
-    protected bool rapidFire;
+    protected WeaponType weaponType;
     protected int damage;
     protected float coolDown;
     protected int maxAmmoInClip;
@@ -19,9 +21,9 @@ public class Weapon {
     {
         return weaponTex;
     }
-    public bool IsRapidFire()
+    public WeaponType GetWeaponType()
     {
-        return rapidFire;
+        return weaponType;
     }
     public int GetDamage()
     {

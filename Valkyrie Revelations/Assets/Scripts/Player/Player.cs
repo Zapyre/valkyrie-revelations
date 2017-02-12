@@ -63,8 +63,10 @@ public class Player : MonoBehaviour
         weaponList = new ArrayList();
         Weapon pistol = new Pistol();
         Weapon machineGun = new MachineGun();
+        Weapon beamCannon = new BeamCannon();
         weaponList.Add(pistol);
         weaponList.Add(machineGun);
+        weaponList.Add(beamCannon);
         equippedWeapon = (Weapon)weaponList[0];
 
         // Enable phone view rotation
@@ -107,31 +109,59 @@ public class Player : MonoBehaviour
             {
                 shooting = true;
             }
-            if (Input.GetMouseButtonUp(0))
-            {
-                shooting = false;
-            }
 
             if (shooting && cooldown < 0 && !crouch)
             {
-                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                RaycastHit hit;
-
-                if (Physics.Raycast(ray, out hit, 100))
+                if (equippedWeapon.GetWeaponType() == WeaponType.SINGLESHOT || equippedWeapon.GetWeaponType() == WeaponType.RAPIDFIRE)
                 {
-                    if (equippedWeapon.GetAmmoInClip() <= 0)
+                    Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                    RaycastHit hit;
+
+                    if (Physics.Raycast(ray, out hit, 100))
                     {
-                        Debug.Log("Reload Weapon!");
+                        if (equippedWeapon.GetAmmoInClip() <= 0)
+                        {
+                            Debug.Log("Reload Weapon!");
+                        }
+                        else
+                        {
+                            cooldown = equippedWeapon.ShootWeapon(hit, this.transform);
+                        }
                     }
-                    else
+
+                    if (equippedWeapon.GetWeaponType() == WeaponType.SINGLESHOT)
                     {
-                        cooldown = equippedWeapon.ShootWeapon(hit, this.transform);
+                        shooting = false;
+                    }
+                    if (Input.GetMouseButtonUp(0))
+                    {
+                        shooting = false;
                     }
                 }
 
-                if (!equippedWeapon.IsRapidFire())
+                if (equippedWeapon.GetWeaponType() == WeaponType.CHARGINGCANNON)
                 {
-                    shooting = false;
+                    ChargeCannon cc = (ChargeCannon)equippedWeapon;
+                    cc.AddChargeTime(Time.deltaTime);
+                    if (Input.GetMouseButtonUp(0))
+                    {
+                        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                        RaycastHit hit;
+
+                        if (Physics.Raycast(ray, out hit, 100))
+                        {
+                            if (equippedWeapon.GetAmmoInClip() <= 0)
+                            {
+                                Debug.Log("Reload Weapon!");
+                            }
+                            else
+                            {
+                                
+                                cooldown = equippedWeapon.ShootWeapon(hit, this.transform);
+                            }
+                        }
+                        shooting = false;
+                    }
                 }
             }
             cooldown -= Time.deltaTime;

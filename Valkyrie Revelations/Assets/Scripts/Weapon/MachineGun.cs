@@ -6,7 +6,7 @@ public class MachineGun : Weapon {
     {
         name = "Machine Gun";
         weaponTex = null;
-        rapidFire = true;
+        weaponType = WeaponType.RAPIDFIRE;
         damage = 8;
         coolDown = 0.1f;
         maxAmmoInClip = 50;

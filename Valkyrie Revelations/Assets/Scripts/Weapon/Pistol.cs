@@ -6,7 +6,7 @@ public class Pistol : Weapon {
     {
         name = "Pistol";
         weaponTex = null;
-        rapidFire = false;
+        weaponType = WeaponType.SINGLESHOT;
         damage = 10;
         coolDown = 0.2f;
         maxAmmoInClip = 10;
