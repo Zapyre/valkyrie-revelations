@@ -31,14 +31,15 @@ public class Player : MonoBehaviour
     private ArrayList weaponList;
     private Weapon equippedWeapon;
 
+    //Weapon Animation Controls
+    protected Transform weapon;
+
     //Camera Rotation Speed
     private float camRotSpeed;
     private float gyroSensitivityUp;
     private float gyroSensitivityDown;
     private float shakeCamera;
     private bool shakeLeft;
-
-    protected GameObject gunObj;
 
     private void Start()
     {
@@ -79,7 +80,7 @@ public class Player : MonoBehaviour
         shakeCamera = 0.0f;
         shakeLeft = true;
 
-        gunObj = GameObject.Find("GunBarrel");
+        weapon = this.transform.FindChild("Gunpoint");
     }
 
 
@@ -129,6 +130,7 @@ public class Player : MonoBehaviour
                         }
                         else
                         {
+                            weapon.LookAt(hit.point);
                             cooldown = equippedWeapon.ShootWeapon(hit, this.transform);
                         }
                     }
@@ -146,7 +148,7 @@ public class Player : MonoBehaviour
                 if (equippedWeapon.GetWeaponType() == WeaponType.CHARGINGCANNON)
                 {
                     ChargeCannon cc = (ChargeCannon)equippedWeapon;
-                    if (cc.GetChargeParticle().isStopped) { 
+                    if (cc.GetChargeParticle().isStopped) {
                         cc.GetChargeParticle().Play();
                         cc.GetChargeParticle().enableEmission = true;
                     }
@@ -155,8 +157,7 @@ public class Player : MonoBehaviour
 
                     if (Physics.Raycast(ray, out hit, 100))
                     {
-                        //cc.GetChargeObj().transform.LookAt(-hit.transform.position);
-                        gunObj.transform.LookAt(hit.transform.position);
+                        weapon.LookAt(hit.point);
                         if (Input.GetMouseButtonUp(0))
                         {
                             if (equippedWeapon.GetAmmoInClip() <= 0)

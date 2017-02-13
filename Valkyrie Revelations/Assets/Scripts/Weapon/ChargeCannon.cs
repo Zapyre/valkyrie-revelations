@@ -41,7 +41,19 @@ public class ChargeCannon : Weapon
     }
     public void AddChargeTime(float ct, Transform transform)
     {
-        chargeTime += ct;
+        if (ammoInClip > 1 && chargeTime < maxCharge)
+        {
+            if ((int)chargeTime < (int)(chargeTime + ct))
+            {
+                ammoInClip--;
+            }
+            chargeTime += ct;
+            if (chargeTime > maxCharge)
+            {
+                chargeTime = maxCharge;
+            }
+        }
+        
     }
     public void ResetChargeTime()
     {
@@ -89,10 +101,10 @@ public class ChargeCannon : Weapon
         if (chargeParticle.isPlaying) { 
             chargeParticle.Stop();
             chargeParticle.enableEmission = false;
-            //shotObj.transform.LookAt(-hit.transform.position);
             shotParticle.Play();
             shotParticle.enableEmission = true;
         }
+        ResetChargeTime();
         return coolDown;
     }
 }
