@@ -14,7 +14,9 @@ public class BeamCannon : ChargeCannon
         maxAmmoInClip = 50;
         ammoInClip = maxAmmoInClip;
         totalAmmo = 300;
-        chargeTime = 0;
         maxCharge = 5;
+        chargeTime = 1;
+        chargeObj = GameObject.Find("PlayerCharge");
+        chargeParticle = chargeObj.GetComponent<ParticleSystem>();
     }
 }

@@ -2,11 +2,15 @@
 using System.Collections;
 
 public class ChargeCannon : Weapon
-{
+{    
     protected float multiplier;
     protected float chargeTime;
     protected int charge;
     protected int maxCharge;
+    protected GameObject chargeObj;
+    protected ParticleSystem chargeParticle;
+    protected GameObject shotObj;
+    protected ParticleSystem shotParticle;
 
     public ChargeCannon()
     {
@@ -21,6 +25,10 @@ public class ChargeCannon : Weapon
         totalAmmo = 300;
         maxCharge = 5;
         chargeTime = 1;
+        chargeObj = GameObject.Find("PlayerCharge");
+        chargeParticle = chargeObj.GetComponent<ParticleSystem>();
+        shotObj = GameObject.Find("PlayerShot");
+        shotParticle = shotObj.GetComponent<ParticleSystem>();
     }
 
     public float GetMultiplier()
@@ -31,13 +39,29 @@ public class ChargeCannon : Weapon
     {
         return chargeTime;
     }
-    public void AddChargeTime(float ct)
+    public void AddChargeTime(float ct, Transform transform)
     {
         chargeTime += ct;
     }
     public void ResetChargeTime()
     {
-        chargeTime = 0;
+        chargeTime = 1;
+    }
+    public GameObject GetChargeObj()
+    {
+        return chargeObj;
+    }
+    public ParticleSystem GetChargeParticle()
+    {
+        return chargeParticle;
+    }
+    public GameObject GetShotObj()
+    {
+        return shotObj;
+    }
+    public ParticleSystem GetShotParticle()
+    {
+        return shotParticle;
     }
 
     public override float ShootWeapon(RaycastHit hit, Transform transform)
@@ -62,6 +86,13 @@ public class ChargeCannon : Weapon
             Debug.Log("Damage: " + damage + " | Multiplier: " + multiplier * charge);
         }
         ammoInClip--;
+        if (chargeParticle.isPlaying) { 
+            chargeParticle.Stop();
+            chargeParticle.enableEmission = false;
+            //shotObj.transform.LookAt(-hit.transform.position);
+            shotParticle.Play();
+            shotParticle.enableEmission = true;
+        }
         return coolDown;
     }
 }

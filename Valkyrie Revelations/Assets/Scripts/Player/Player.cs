@@ -38,6 +38,8 @@ public class Player : MonoBehaviour
     private float shakeCamera;
     private bool shakeLeft;
 
+    protected GameObject gunObj;
+
     private void Start()
     {
         // get the third person character ( this should never be null due to require component )
@@ -76,6 +78,8 @@ public class Player : MonoBehaviour
         gyroSensitivityDown = 0.40f;
         shakeCamera = 0.0f;
         shakeLeft = true;
+
+        gunObj = GameObject.Find("GunBarrel");
     }
 
 
@@ -93,7 +97,7 @@ public class Player : MonoBehaviour
                 Touch myTouch = Input.touches[0];
 
                 //Check if the phase of that touch equals Began
-                if (myTouch.phase == TouchPhase.Began)
+                if (myTouch.phase == TouchPhase.Began && !crouch)
                 {
                     //If so, set touchOrigin to the position of that touch
                     Vector2 touchOrigin = myTouch.position;
@@ -105,7 +109,7 @@ public class Player : MonoBehaviour
                 //shooting = false;
             }
 
-            if (Input.GetMouseButtonDown(0))
+            if (Input.GetMouseButtonDown(0) && !crouch)
             {
                 shooting = true;
             }
@@ -142,13 +146,18 @@ public class Player : MonoBehaviour
                 if (equippedWeapon.GetWeaponType() == WeaponType.CHARGINGCANNON)
                 {
                     ChargeCannon cc = (ChargeCannon)equippedWeapon;
-                    cc.AddChargeTime(Time.deltaTime);
-                    if (Input.GetMouseButtonUp(0))
-                    {
-                        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                        RaycastHit hit;
+                    if (cc.GetChargeParticle().isStopped) { 
+                        cc.GetChargeParticle().Play();
+                        cc.GetChargeParticle().enableEmission = true;
+                    }
+                    Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                    RaycastHit hit;
 
-                        if (Physics.Raycast(ray, out hit, 100))
+                    if (Physics.Raycast(ray, out hit, 100))
+                    {
+                        //cc.GetChargeObj().transform.LookAt(-hit.transform.position);
+                        gunObj.transform.LookAt(hit.transform.position);
+                        if (Input.GetMouseButtonUp(0))
                         {
                             if (equippedWeapon.GetAmmoInClip() <= 0)
                             {
@@ -156,12 +165,12 @@ public class Player : MonoBehaviour
                             }
                             else
                             {
-                                
                                 cooldown = equippedWeapon.ShootWeapon(hit, this.transform);
                             }
+                            shooting = false;
                         }
-                        shooting = false;
                     }
+                    cc.AddChargeTime(Time.deltaTime, transform);
                 }
             }
             cooldown -= Time.deltaTime;
