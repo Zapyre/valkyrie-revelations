@@ -5,6 +5,7 @@ public class ChargeCannon : Weapon
 {    
     protected float multiplier;
     protected float chargeTime;
+    protected float chargeSpeed;
     protected int charge;
     protected int maxCharge;
     protected GameObject chargeObj;
@@ -19,11 +20,12 @@ public class ChargeCannon : Weapon
         weaponType = WeaponType.CHARGINGCANNON;
         damage = 1;
         multiplier = 2;
-        coolDown = 0.1f;
+        coolDown = 1f;
         maxAmmoInClip = 50;
         ammoInClip = maxAmmoInClip;
         totalAmmo = 300;
         maxCharge = 5;
+        chargeSpeed = 2;
         chargeTime = 1;
         chargeObj = GameObject.Find("PlayerCharge");
         chargeParticle = chargeObj.GetComponent<ParticleSystem>();
@@ -43,11 +45,11 @@ public class ChargeCannon : Weapon
     {
         if (ammoInClip > 1 && chargeTime < maxCharge)
         {
-            if ((int)chargeTime < (int)(chargeTime + ct))
+            if ((int)chargeTime < (int)(chargeTime + ct * chargeSpeed))
             {
                 ammoInClip--;
             }
-            chargeTime += ct;
+            chargeTime += ct * chargeSpeed;
             if (chargeTime > maxCharge)
             {
                 chargeTime = maxCharge;
@@ -106,5 +108,15 @@ public class ChargeCannon : Weapon
         }
         ResetChargeTime();
         return coolDown;
+    }
+
+    public override void ResetWeapon()
+    {
+        if (chargeParticle.isPlaying)
+        {
+            chargeParticle.Stop();
+            chargeParticle.enableEmission = false;
+        }
+        ResetChargeTime();
     }
 }

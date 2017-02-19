@@ -3,7 +3,8 @@ using System.Collections;
 
 public enum WeaponType { SINGLESHOT, RAPIDFIRE, CHARGINGCANNON }
 
-public class Weapon {
+public class Weapon
+{
     protected string name;
     protected Texture weaponTex;
     protected WeaponType weaponType;
@@ -83,5 +84,9 @@ public class Weapon {
         }
         ammoInClip--;
         return coolDown;
+    }
+
+    public virtual void ResetWeapon()
+    {
     }
 }

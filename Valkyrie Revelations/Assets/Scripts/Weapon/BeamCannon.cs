@@ -9,13 +9,14 @@ public class BeamCannon : ChargeCannon
         weaponTex = null;
         weaponType = WeaponType.CHARGINGCANNON;
         damage = 2;
-        multiplier = 2.5f;
-        coolDown = 0.1f;
+        multiplier = 5f;
+        coolDown = 1f;
         maxAmmoInClip = 50;
         ammoInClip = maxAmmoInClip;
         totalAmmo = 300;
         maxCharge = 5;
         chargeTime = 1;
+        chargeSpeed = 2;
         chargeObj = GameObject.Find("PlayerCharge");
         chargeParticle = chargeObj.GetComponent<ParticleSystem>();
     }

@@ -158,6 +158,9 @@ public class Player : MonoBehaviour
                     if (Physics.Raycast(ray, out hit, 100))
                     {
                         weapon.LookAt(hit.point);
+                        DrawLine(weapon.position, hit.point, Color.red);
+
+
                         if (Input.GetMouseButtonUp(0))
                         {
                             if (equippedWeapon.GetAmmoInClip() <= 0)
@@ -281,6 +284,8 @@ public class Player : MonoBehaviour
                 equippedWeapon.Reload();
                 mainCamera.enabled = false;
                 coverCamera.enabled = true;
+                shooting = false;
+                equippedWeapon.ResetWeapon();
             }
             else
             {
@@ -423,5 +428,20 @@ public class Player : MonoBehaviour
                 shakeLeft = true;
             }
         }
+    }
+
+    protected void DrawLine(Vector3 start, Vector3 end, Color color, float duration = 0.05f)
+    {
+        GameObject myLine = new GameObject();
+        myLine.name = "Target line";
+        myLine.transform.position = start;
+        myLine.AddComponent<LineRenderer>();
+        LineRenderer lr = myLine.GetComponent<LineRenderer>();
+        lr.material = new Material(Shader.Find("Particles/Alpha Blended Premultiply"));
+        lr.SetColors(color, color);
+        lr.SetWidth(0.1f, 0.1f);
+        lr.SetPosition(0, start);
+        lr.SetPosition(1, end);
+        GameObject.Destroy(myLine, duration);
     }
 }
