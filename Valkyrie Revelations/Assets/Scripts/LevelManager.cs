@@ -29,11 +29,11 @@ public class LevelManager : MonoBehaviour {
         areaList = new ArrayList();
         Area a = new Area(new Vector3(0, 0, 2), new Vector3(3, 0, 0), 3, new Vector3(0, 0, 40), new Vector3(0,0,41));
         areaList.Add(a);
-        Area b = new Area(new Vector3(0, 0, 2), new Vector3(3, 0, 0), 3, new Vector3(0, 0, 40), new Vector3(1, 0, 28));
+        Area b = new Area(new Vector3(0, 0, 2), new Vector3(3, 0, 0), 6, new Vector3(0, 0, 60), new Vector3(0, 0, 61));
         areaList.Add(b);
-        /*Area b = new Area(new Vector3(2, 0, 0), new Vector3(0, 0, 3), 6, new Vector3(28, 0, 28), new Vector3(28, 0, 29));
-        areaList.Add(b);
-        Area c = new Area(new Vector3(0, 0, 2), new Vector3(-3, 0, 0), 9, new Vector3(-35, 0, 28), new Vector3(-35, 0, 27));
+        Area c = new Area(new Vector3(2, 0, 0), new Vector3(0, 0, 3), 6, new Vector3(0, 0, 60), new Vector3(0, 0, 61));
+        areaList.Add(c);
+        /*Area c = new Area(new Vector3(0, 0, 2), new Vector3(-3, 0, 0), 9, new Vector3(-35, 0, 28), new Vector3(-35, 0, 27));
         areaList.Add(c);
         Area d = new Area(new Vector3(0, 0, -2), new Vector3(3, 0, 0), 12, new Vector3(0, 0, 28), new Vector3(0, 0, 29));
         areaList.Add(d);
@@ -73,8 +73,10 @@ public class LevelManager : MonoBehaviour {
             {
                 if (!enemiesAreaActivated)
                 {
+                    Debug.Log("Enemies Activated " + enemiesActivated);
                     for (int i = enemiesActivated; i < GetCurrentArea().enemyBreakPoint; i++)
                     {
+                        Debug.Log("Activating enemy " + enemiesActivated);
                         GameObject.Find("Enemy " + enemiesActivated).GetComponent<Enemy>().enabled = true;
                         enemiesActivated++;
                         enemiesAreaActivated = true;
@@ -127,6 +129,7 @@ public class LevelManager : MonoBehaviour {
         if (area.CheckAreaPassed(enemiesDefeated, 1.0f))
         {
             moveToNextArea = true;
+            enemiesAreaActivated = false;
         }
     }
 
